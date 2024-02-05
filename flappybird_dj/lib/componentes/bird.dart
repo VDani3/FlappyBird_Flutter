@@ -1,13 +1,15 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flappybird_dj/other/assets.dart';
 import 'package:flappybird_dj/other/birdmovement.dart';
 import 'package:flappybird_dj/other/configuration.dart';
 import 'package:flappybird_dj/pages/GamePage.dart';
 import 'package:flutter/animation.dart';
 
-class Bird extends SpriteGroupComponent<BirdMovement> with HasGameRef<GamePage>, CollisionCallbacks {
+class Bird extends SpriteGroupComponent<BirdMovement>
+    with HasGameRef<GamePage>, CollisionCallbacks {
   Bird();
 
   int score = 0;
@@ -19,7 +21,7 @@ class Bird extends SpriteGroupComponent<BirdMovement> with HasGameRef<GamePage>,
     final birdDownFlap = await gameRef.loadSprite(Assets.birdDownFlap);
 
     size = Vector2(50, 40);
-    position = Vector2(50, gameRef.size.y/2 - size.y /2);
+    position = Vector2(50, gameRef.size.y / 2 - size.y / 2);
     current = BirdMovement.middle;
     sprites = {
       BirdMovement.middle: birdMidFlap,
@@ -31,23 +33,24 @@ class Bird extends SpriteGroupComponent<BirdMovement> with HasGameRef<GamePage>,
   }
 
   void fly() {
-    add(
-      MoveByEffect(
-        Vector2(0, Configuration.gravity),
-        EffectController(duration: 0.2, curve: Curves.decelerate),
-        onComplete: () => current = BirdMovement.down,
-      )
-    );
+    add(MoveByEffect(
+      Vector2(0, Configuration.gravity),
+      EffectController(duration: 0.2, curve: Curves.decelerate),
+      onComplete: () => current = BirdMovement.down,
+    ));
     current = BirdMovement.up;
+    FlameAudio.play(Assets.flying);
   }
 
   @override
-  void onCollisionStart( Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
     gameOver();
   }
 
   void gameOver() {
+    FlameAudio.play(Assets.collision);
     gameRef.overlays.add('gameOver');
     gameRef.pauseEngine();
     game.isHit = true;
@@ -55,16 +58,15 @@ class Bird extends SpriteGroupComponent<BirdMovement> with HasGameRef<GamePage>,
 
   void reset() {
     position = Vector2(50, gameRef.size.y / 2 - size.y / 2);
+    score = 0;
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    position.y +=Configuration.birdVelocity * dt;
-    
+    position.y += Configuration.birdVelocity * dt;
+    if (position.y <= 0) {
+      gameOver();
+    }
   }
 }
-
-
-
-

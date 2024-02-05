@@ -1,13 +1,14 @@
-
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flappybird_dj/componentes/pipe.dart';
+import 'package:flappybird_dj/other/assets.dart';
 import 'package:flappybird_dj/other/configuration.dart';
 import 'package:flappybird_dj/other/pipe_position.dart';
 import 'package:flappybird_dj/pages/GamePage.dart';
 
-class PipeGroup extends PositionComponent with HasGameRef<GamePage>{
+class PipeGroup extends PositionComponent with HasGameRef<GamePage> {
   PipeGroup();
 
   final _random = Random();
@@ -17,11 +18,14 @@ class PipeGroup extends PositionComponent with HasGameRef<GamePage>{
     position.x = gameRef.size.x;
 
     final heightMinusGround = gameRef.size.y - Configuration.groundHeight;
-    final spacing = 100 + _random.nextDouble() * (heightMinusGround/4);
-    final centerY = spacing + _random.nextDouble() * (heightMinusGround -spacing);
+    final spacing = 100 + _random.nextDouble() * (heightMinusGround / 4);
+    final centerY =
+        spacing + _random.nextDouble() * (heightMinusGround - spacing);
     addAll([
-      Pipe(height: centerY - spacing/2, pipePosition: PipePosition.top),
-      Pipe(height: heightMinusGround -(centerY + spacing/2), pipePosition: PipePosition.bottom),
+      Pipe(height: centerY - spacing / 2, pipePosition: PipePosition.top),
+      Pipe(
+          height: heightMinusGround - (centerY + spacing / 2),
+          pipePosition: PipePosition.bottom),
     ]);
   }
 
@@ -43,9 +47,6 @@ class PipeGroup extends PositionComponent with HasGameRef<GamePage>{
 
   void updateScore() {
     gameRef.bird.score += 1;
+    FlameAudio.play(Assets.point);
   }
 }
-
-
-
-

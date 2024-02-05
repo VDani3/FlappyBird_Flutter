@@ -32,6 +32,7 @@ class GamePage extends FlameGame with TapDetector, HasCollisionDetection{
     return TextBoxComponent(
       text: 'Score: 0',
       position: Vector2(size.x /2, size.y / 2*0.2),
+      anchor: Anchor.center,
       textRenderer: TextPaint(
         style: TextStyle(
           fontSize: 40, 
