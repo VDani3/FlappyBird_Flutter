@@ -10,6 +10,8 @@ import 'package:flutter/animation.dart';
 class Bird extends SpriteGroupComponent<BirdMovement> with HasGameRef<GamePage>, CollisionCallbacks {
   Bird();
 
+  int score = 0;
+
   @override
   Future<void> onLoad() async {
     final birdMidFlap = await gameRef.loadSprite(Assets.birdMidFlap);

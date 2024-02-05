@@ -32,12 +32,17 @@ class PipeGroup extends PositionComponent with HasGameRef<GamePage>{
 
     if (position.x < -10) {
       removeFromParent();
+      updateScore();
     }
 
     if (game.isHit) {
       removeFromParent();
       gameRef.isHit = false;
     }
+  }
+
+  void updateScore() {
+    gameRef.bird.score += 1;
   }
 }
 

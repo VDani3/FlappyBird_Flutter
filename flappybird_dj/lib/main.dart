@@ -1,4 +1,3 @@
-import 'dart:js';
 
 import 'package:flame/game.dart';
 import 'package:flappybird_dj/pages/GamePage.dart';
