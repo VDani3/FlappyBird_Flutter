@@ -8,28 +8,60 @@ class MainMenu extends StatelessWidget {
   final GamePage game;
   static const String id = "mainMenu";
 
-  const MainMenu({Key? key, required this.game}) : super(key: key);
+  MainMenu({Key? key, required this.game}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController _nameController = TextEditingController();
+    TextEditingController _ipController = TextEditingController();
     game.pauseEngine();
-    return Scaffold(
-      body: GestureDetector(
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(Assets.menu),
-              fit: BoxFit.fill
-            )
-          ),
-          child: Image.asset(Assets.message),
+
+    return Material(
+      color: Colors.white,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Flappy Bird',
+              style: TextStyle(fontFamily: 'Game', fontSize: 80),
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            SizedBox(
+              width: 250,
+              height: 100,
+              child: TextField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  labelText: 'Player Name',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 250,
+              height: 100,
+              child: TextField(
+                controller: _ipController,
+                decoration: InputDecoration(
+                  labelText: 'IP:Port',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  game.overlays.remove('mainMenu');
+                  game.overlays.add('countdown');
+                },
+                child: Text('Dale'))
+          ],
         ),
-        onTap: () {
-          game.overlays.remove('mainMenu');
-          game.resumeEngine();
-        }
       ),
     );
   }

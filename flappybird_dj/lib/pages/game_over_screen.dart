@@ -1,3 +1,4 @@
+import 'package:flappybird_dj/componentes/pipe_group.dart';
 import 'package:flappybird_dj/other/assets.dart';
 import 'package:flappybird_dj/pages/GamePage.dart';
 import 'package:flutter/material.dart';
@@ -26,14 +27,15 @@ class GameOverScreen extends StatelessWidget {
               ),
             ),
             Image.asset(Assets.gameOver),
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
             ElevatedButton(
-              onPressed: restartGame, 
-              child: const Text(
-                "Restart",
-                style: TextStyle(fontSize: 20),
-              )
-            )
+                onPressed: restartGame,
+                child: const Text(
+                  "Restart",
+                  style: TextStyle(fontSize: 20),
+                ))
           ],
         ),
       ),
@@ -42,7 +44,9 @@ class GameOverScreen extends StatelessWidget {
 
   void restartGame() {
     game.bird.reset();
+    game.overlays.add('mainMenu');
     game.overlays.remove('gameOver');
-    game.resumeEngine();
+    
+    //game.resumeEngine();
   }
 }
