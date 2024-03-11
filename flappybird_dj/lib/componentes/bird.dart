@@ -2,6 +2,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame_audio/flame_audio.dart';
+import 'package:flappybird_dj/other/appdata.dart';
 import 'package:flappybird_dj/other/assets.dart';
 import 'package:flappybird_dj/other/birdmovement.dart';
 import 'package:flappybird_dj/other/configuration.dart';
@@ -10,9 +11,16 @@ import 'package:flutter/animation.dart';
 
 class Bird extends SpriteGroupComponent<BirdMovement>
     with HasGameRef<GamePage>, CollisionCallbacks {
-  Bird();
+  Bird(bool p, int i) : super() {
+    this.p1 = p;
+    this.id = i;
+  }
 
+  bool p1 = false;
+  bool fainted = false;
   int score = 0;
+  int id = 0;
+  AppData data = AppData.instance;
 
   @override
   Future<void> onLoad() async {
@@ -29,7 +37,9 @@ class Bird extends SpriteGroupComponent<BirdMovement>
       BirdMovement.down: birdDownFlap
     };
 
-    add(CircleHitbox());
+    if (p1) {
+      add(CircleHitbox());
+    }
   }
 
   void fly() {
@@ -46,7 +56,8 @@ class Bird extends SpriteGroupComponent<BirdMovement>
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    gameOver();
+    data.setFainted(id);
+    //gameOver();
   }
 
   void gameOver() {
@@ -64,9 +75,11 @@ class Bird extends SpriteGroupComponent<BirdMovement>
   @override
   void update(double dt) {
     super.update(dt);
-    position.y += Configuration.birdVelocity * dt;
+    if (p1 && !fainted) position.y += Configuration.birdVelocity * dt;
     if (position.y <= 0) {
-      gameOver();
+      //gameOver();
+      data.setFainted(id);
     }
+    if (data.gameover) gameOver();
   }
 }
