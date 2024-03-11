@@ -2,29 +2,27 @@ import 'package:flappybird_dj/componentes/bird.dart';
 import 'package:flutter/material.dart';
 
 class AppData {
-  // Private constructor
-  AppData._();
+  static AppData instance = AppData();
 
-  // Singleton instance variable
-  static final AppData _instance = AppData._();
+  AppData();
 
-  // Getter for the instance
-  static AppData get instance => _instance;
-
-
-  AppData._internal();
-
+  //Variables
   List<Bird> playersList = [
-    Bird(true, 0),
-    Bird(false, 1),
-    Bird(false, 2),
-    Bird(false, 3)
+    Bird(true, 0, false),
+    Bird(false, 1, true),
+    Bird(false, 2, true),
+    Bird(false, 3, true)
   ];
   bool gameover = false;
 
   //Functions
+  static AppData getInstance() {
+    return instance;
+  }
+
   void setFainted(int id) {
     playersList[id].fainted = true;
+    checkGameOver();
   }
 
   void checkGameOver() {
@@ -32,7 +30,6 @@ class AppData {
     for (Bird b in playersList) {
       if (b.fainted) num += 1;
     }
-
-    if (num >= 4) gameover = true;  //If all are fainted
+    if (num >= 4) gameover = true; //If all are fainted
   }
 }

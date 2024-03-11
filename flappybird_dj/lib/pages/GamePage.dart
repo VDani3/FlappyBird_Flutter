@@ -17,17 +17,16 @@ class GamePage extends FlameGame with TapDetector, HasCollisionDetection {
   late TextBoxComponent score;
   Timer interval = Timer(Configuration.pipeInterval, repeat: true);
   bool isHit = false;
-  AppData data = AppData.instance;
 
   @override
   Future<void> onLoad() async {
     addAll([
       Background(),
       Ground(),
-      bird = data.playersList[0],
-      bird2 = data.playersList[1],
-      bird3 = data.playersList[2],
-      bird3 = data.playersList[3],
+      bird = AppData.instance.playersList[0],
+      bird2 = AppData.instance.playersList[1],
+      bird3 = AppData.instance.playersList[2],
+      bird3 = AppData.instance.playersList[3],
       score = buildScore(),
     ]);
 

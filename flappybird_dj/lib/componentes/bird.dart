@@ -11,16 +11,16 @@ import 'package:flutter/animation.dart';
 
 class Bird extends SpriteGroupComponent<BirdMovement>
     with HasGameRef<GamePage>, CollisionCallbacks {
-  Bird(bool p, int i) : super() {
+  Bird(bool p, int i, bool f) : super() {
     this.p1 = p;
     this.id = i;
+    this.fainted = f;  //Temporal
   }
 
   bool p1 = false;
   bool fainted = false;
   int score = 0;
   int id = 0;
-  AppData data = AppData.instance;
 
   @override
   Future<void> onLoad() async {
@@ -56,7 +56,7 @@ class Bird extends SpriteGroupComponent<BirdMovement>
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    data.setFainted(id);
+    AppData.instance.setFainted(id);
     //gameOver();
   }
 
@@ -78,8 +78,8 @@ class Bird extends SpriteGroupComponent<BirdMovement>
     if (p1 && !fainted) position.y += Configuration.birdVelocity * dt;
     if (position.y <= 0) {
       //gameOver();
-      data.setFainted(id);
+      AppData.instance.setFainted(id);
     }
-    if (data.gameover) gameOver();
+    if (AppData.instance.gameover) gameOver();
   }
 }
