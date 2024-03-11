@@ -7,14 +7,18 @@ const debug = true
     WebSockets server, example of messages:
 
     From client to server:
-        - Client init           { "type": "init", "name": "name", "color": "0x000000" }
+        - Client init           { "type": "init", "name": "name" }
         - Player movement       { "type": "move", "x": 0, "y": 0 }
+        - Player loose          { "type": "loose", "puntuation": 0}
 
     From server to client:
-        - Welcome message       { "type": "welcome", "value": "Welcome to the server", "id", "clientId" }
+        - Welcome message       { "type": "welcome", "value": "Welcome to the server", "id": 'ABC123' }
         
     From server to everybody (broadcast):
-        - All clients data      { "type": "data", "data": "clientsData" }
+        - All clients data      { "type": "data", "data": [{"id": 'ABC123', "name": 'Abcd', "x": 0, "y": 0 }, {"id": 'XYZ789', "name": 'Wxyz', "x": 0, "y": 0 }] }
+        - Start game            { "type": "start", "data": ""}
+        - Someone loose         { "type": "lost", "data": "{"id": 'ABC123', "name": 'Abcd', "x": 0, "y": 0 }"}
+        - All clients lost      { "type": "finnish", "data":"[{ "name": 'Abcd', "puntuation": 0 }, { "name": 'Wxyz', "puntuation": 0 }]"}
 */
 
 var ws = new webSockets()
@@ -101,7 +105,7 @@ gLoop.run = (fps) => {
   let clientsData = ws.getClientsData()
 
   // Gestionar aquí la partida, estats i final
-  //console.log(clientsData)
+  console.log(clientsData)
 
   // Send game status data to everyone
   ws.broadcast(JSON.stringify({ type: "data", value: clientsData }))
