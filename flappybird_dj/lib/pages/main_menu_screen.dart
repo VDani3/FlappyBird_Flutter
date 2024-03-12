@@ -1,3 +1,4 @@
+import 'package:flappybird_dj/other/appdata.dart';
 import 'package:flappybird_dj/other/assets.dart';
 import 'package:flappybird_dj/pages/GamePage.dart';
 import 'package:flutter/foundation.dart';
@@ -56,8 +57,9 @@ class MainMenu extends StatelessWidget {
             ),
             ElevatedButton(
                 onPressed: () {
+                  AppData.instance.initializeWebsocket(_ipController.text);
                   game.overlays.remove('mainMenu');
-                  game.overlays.add('countdown');
+                  game.overlays.add('waiting');
                 },
                 child: Text('Dale'))
           ],
