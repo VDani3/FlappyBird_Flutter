@@ -14,9 +14,10 @@ class Bird extends SpriteGroupComponent<BirdMovement>
   Bird(bool p, int i, bool f) : super() {
     this.p1 = p;
     this.id = i;
-    this.fainted = f;  //Temporal
+    this.fainted = f; //Temporal
   }
 
+  String? name;
   bool p1 = false;
   bool fainted = false;
   int score = 0;
@@ -24,9 +25,11 @@ class Bird extends SpriteGroupComponent<BirdMovement>
 
   @override
   Future<void> onLoad() async {
-    final birdMidFlap = await gameRef.loadSprite(Assets.birdMidFlap);
-    final birdUpFlap = await gameRef.loadSprite(Assets.birdUpFlap);
-    final birdDownFlap = await gameRef.loadSprite(Assets.birdDownFlap);
+    final birdMidFlap = await gameRef.loadSprite(Assets.birdMidFlap[id]);
+    final birdUpFlap = await gameRef.loadSprite(Assets.birdUpFlap[id]);
+    final birdDownFlap = await gameRef.loadSprite(Assets.birdDownFlap[id]);
+
+    name = AppData.instance.playersName[id];
 
     size = Vector2(50, 40);
     position = Vector2(50, gameRef.size.y / 2 - size.y / 2);
@@ -70,6 +73,7 @@ class Bird extends SpriteGroupComponent<BirdMovement>
   void reset() {
     position = Vector2(50, gameRef.size.y / 2 - size.y / 2);
     score = 0;
+    fainted = false;
   }
 
   @override
@@ -81,5 +85,9 @@ class Bird extends SpriteGroupComponent<BirdMovement>
       AppData.instance.setFainted(id);
     }
     if (AppData.instance.gameover) gameOver();
+  }
+
+  int getScore() {
+    return score;
   }
 }

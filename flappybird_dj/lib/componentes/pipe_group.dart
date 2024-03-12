@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flappybird_dj/componentes/pipe.dart';
+import 'package:flappybird_dj/other/appdata.dart';
 import 'package:flappybird_dj/other/assets.dart';
 import 'package:flappybird_dj/other/configuration.dart';
 import 'package:flappybird_dj/other/pipe_position.dart';
@@ -39,9 +40,9 @@ class PipeGroup extends PositionComponent with HasGameRef<GamePage> {
       updateScore();
     }
 
-    if (game.isHit) {
+    if (AppData.instance.gameover) {
       removeFromParent();
-      gameRef.isHit = false;
+      //gameRef.isHit = false;
     }
   }
 

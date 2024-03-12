@@ -1,3 +1,4 @@
+import 'package:flappybird_dj/other/appdata.dart';
 import 'package:flappybird_dj/other/assets.dart';
 import 'package:flappybird_dj/pages/GamePage.dart';
 import 'package:flutter/foundation.dart';
@@ -58,6 +59,7 @@ class MainMenu extends StatelessWidget {
                 onPressed: () {
                   game.overlays.remove('mainMenu');
                   game.overlays.add('countdown');
+                  AppData.instance.gameover = false;
                 },
                 child: Text('Dale'))
           ],
