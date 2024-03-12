@@ -60,6 +60,7 @@ class MainMenu extends StatelessWidget {
                   AppData.instance.initializeWebsocket(_ipController.text);
                   game.overlays.remove('mainMenu');
                   game.overlays.add('waiting');
+                  AppData.instance.gameover = false;
                 },
                 child: Text('Dale'))
           ],
