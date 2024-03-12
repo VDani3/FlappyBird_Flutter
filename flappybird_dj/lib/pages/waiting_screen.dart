@@ -16,19 +16,6 @@ class _WaitingRoomState extends State<WaitingRoom> {
   bool _waiting = false;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    AppData data = Provider.of<AppData>(context);
-    if (data.playersList.length == 4) {
-      setState(() {
-        _waiting = true;
-      });
-      widget.game.overlays.remove('mainMenu');
-      widget.game.overlays.add('waiting');
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(

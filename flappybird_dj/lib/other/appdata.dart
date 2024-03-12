@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ui_web';
 
 import 'package:flappybird_dj/componentes/bird.dart';
 import 'package:flappybird_dj/pages/GamePage.dart';
