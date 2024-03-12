@@ -14,7 +14,7 @@ class GameOverScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.black38,
+      color: Colors.black87,
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -27,7 +27,7 @@ class GameOverScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Container(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Image.asset(
@@ -35,13 +35,22 @@ class GameOverScreen extends StatelessWidget {
                           width: 60,
                           height: 60,
                         ),
-                        SizedBox(width: 16,),
-                        Text(
-                          AppData.instance.playersName[index]
+                        SizedBox(
+                          width: 16,
                         ),
-                        SizedBox(width: 8,),
                         Text(
-                          'Score: ${AppData.instance.playerScore[index]}',
+                          AppData.instance.playersName[index],
+                          style: TextStyle(
+                            fontSize: 40,
+                            color: Assets.fontColors[index],
+                            fontFamily: "Game",
+                          ),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          '${AppData.instance.playerScore[index]}p',
                           style: TextStyle(
                             fontSize: 40,
                             color: Colors.white,
@@ -54,18 +63,6 @@ class GameOverScreen extends StatelessWidget {
                 },
               ),
             ),
-            /* Text(
-              "Score: ${game.bird.score}",
-              style: TextStyle(
-                fontSize: 60,
-                color: Colors.white,
-                fontFamily: "Game",
-              ),
-            ),
-            Image.asset(Assets.gameOver),
-            const SizedBox(
-              height: 20,
-            ), */
             ElevatedButton(
                 onPressed: restartGame,
                 child: const Text(
