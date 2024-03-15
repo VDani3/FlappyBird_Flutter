@@ -14,7 +14,6 @@ class AppData {
   AppData();
 
   //Variables
-  List<String> playersName = ['Pepe', 'Jose Roberto', 'Joel', 'Dani'];
   List<int> playerScore = [0, 0, 0, 0];
   List<Bird> playersList = [
     Bird(true, 0, false),
@@ -35,8 +34,12 @@ class AppData {
     return instance;
   }
 
-  String getPlayerInfo(id) {
+  String getPlayerName(id) {
     return playersList[id].name;
+  }
+
+  int getPlayerScore(id) {
+    return playersList[id].score;
   }
 
   void resetGame() {

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -10,6 +8,7 @@ import 'package:flappybird_dj/other/birdmovement.dart';
 import 'package:flappybird_dj/other/configuration.dart';
 import 'package:flappybird_dj/pages/GamePage.dart';
 import 'package:flutter/animation.dart';
+import 'package:flutter/material.dart';
 
 class Bird extends SpriteGroupComponent<BirdMovement>
     with HasGameRef<GamePage>, CollisionCallbacks {
@@ -19,7 +18,7 @@ class Bird extends SpriteGroupComponent<BirdMovement>
     this.fainted = f; //Temporal
   }
 
-  String name = "Waiting...";
+  String name = "P1";
   bool p1 = false;
   bool fainted = false;
   int score = 0;
@@ -30,8 +29,6 @@ class Bird extends SpriteGroupComponent<BirdMovement>
     final birdMidFlap = await gameRef.loadSprite(Assets.birdMidFlap[id]);
     final birdUpFlap = await gameRef.loadSprite(Assets.birdUpFlap[id]);
     final birdDownFlap = await gameRef.loadSprite(Assets.birdDownFlap[id]);
-
-    name = AppData.instance.playersName[id];
 
     size = Vector2(50, 40);
     position = Vector2(50, gameRef.size.y / 2 - size.y / 2);
@@ -44,6 +41,14 @@ class Bird extends SpriteGroupComponent<BirdMovement>
 
     if (p1) {
       add(CircleHitbox());
+      add(TextBoxComponent(
+        text: name,
+        position: Vector2(position.x, -20),
+        anchor: Anchor.center,
+        textRenderer: TextPaint(
+          style: TextStyle( fontWeight: FontWeight.bold, fontSize: 10)
+        )
+      ));
     }
   }
 
