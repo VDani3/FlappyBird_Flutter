@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:flame/input.dart';
 import 'package:flappybird_dj/componentes/bird.dart';
 import 'package:flappybird_dj/pages/GamePage.dart';
 import 'package:flutter/material.dart';
@@ -86,6 +87,17 @@ class AppData {
         game.overlays.add('waiting');
         AppData.instance.gameover = false;
       }
+    }
+  }
+
+  void resetPlayerList() {
+    for (Bird player in playersList) {
+      player.name = "Waiting...";
+      player.p1 = false;
+      player.fainted = false;
+      player.score = 0;
+      player.id = 0;
+      player.position = Vector2(50, game.size.y / 2 - player.size.y / 2);
     }
   }
 }
