@@ -32,6 +32,10 @@ class AppData {
     return instance;
   }
 
+  String getPlayerInfo(id) {
+    return playersList[id].name;
+  }
+
   void resetGame() {
     for (int i = 0; i < playersList.length; i++) {
       playersList[i].reset();

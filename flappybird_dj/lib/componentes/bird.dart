@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -17,7 +19,7 @@ class Bird extends SpriteGroupComponent<BirdMovement>
     this.fainted = f; //Temporal
   }
 
-  String? name;
+  String name = "Waiting...";
   bool p1 = false;
   bool fainted = false;
   int score = 0;
@@ -85,6 +87,10 @@ class Bird extends SpriteGroupComponent<BirdMovement>
       AppData.instance.setFainted(id);
     }
     if (AppData.instance.gameover) gameOver();
+  }
+
+  void setName(String name) {
+    this.name = name;
   }
 
   int getScore() {

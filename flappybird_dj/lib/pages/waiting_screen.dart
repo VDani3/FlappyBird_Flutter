@@ -17,10 +17,24 @@ class _WaitingRoomState extends State<WaitingRoom> {
 
   @override
   Widget build(BuildContext context) {
+    AppData data = Provider.of<AppData>(context);
+
     return Scaffold(
       body: Center(
-        child: _waiting ? Text('Waiting...') : Container(),
-      ),
+          child: ListView.builder(
+        itemCount: data.playersList.length,
+        itemBuilder: (context, index) {
+          return Container(
+            height: 100,
+            child: Row(
+              children: [
+                Text('Player $index'),
+                Text(data.getPlayerInfo(index))
+              ],
+            ),
+          );
+        },
+      )),
     );
   }
 }
