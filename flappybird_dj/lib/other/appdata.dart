@@ -61,9 +61,12 @@ class AppData {
     }
   }
 
-  void initializeWebsocket(String serverIp) {
+  void initializeWebsocket(String serverIp, String name) {
     websocket = WebSocketsHandler();
-    websocket.connectToServer(serverIp, serverMessageHandler);
+    websocket.connectToServer(serverIp, name, serverMessageHandler);
+    game.overlays.remove('mainMenu');
+    game.overlays.add('waiting');
+    AppData.instance.gameover = false;
   }
 
   void serverMessageHandler(String message) {
