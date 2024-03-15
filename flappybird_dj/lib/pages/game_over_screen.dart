@@ -39,7 +39,7 @@ class GameOverScreen extends StatelessWidget {
                           width: 16,
                         ),
                         Text(
-                          AppData.instance.playersName[index],
+                          AppData.instance.getPlayerName(index),
                           style: TextStyle(
                             fontSize: 40,
                             color: Assets.fontColors[index],
@@ -50,7 +50,7 @@ class GameOverScreen extends StatelessWidget {
                           width: 8,
                         ),
                         Text(
-                          '${AppData.instance.playerScore[index]}p',
+                          '${AppData.instance.getPlayerScore(index)}p',
                           style: TextStyle(
                             fontSize: 40,
                             color: Colors.white,

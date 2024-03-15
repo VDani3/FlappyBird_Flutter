@@ -17,7 +17,7 @@ class _WaitingRoomState extends State<WaitingRoom> {
 
   @override
   Widget build(BuildContext context) {
-    AppData data = Provider.of<AppData>(context);
+    AppData data = AppData.instance;
 
     return Scaffold(
       body: Center(
@@ -27,9 +27,12 @@ class _WaitingRoomState extends State<WaitingRoom> {
           return Container(
             height: 100,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text('Player $index'),
-                Text(data.getPlayerInfo(index))
+                SizedBox(width: 20,),
+                Text(data.getPlayerName(index) == "" ? "Waiting..." : data.getPlayerName(index)),
               ],
             ),
           );
