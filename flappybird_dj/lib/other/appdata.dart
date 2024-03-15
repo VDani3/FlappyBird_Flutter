@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flappybird_dj/componentes/bird.dart';
 import 'package:flappybird_dj/pages/GamePage.dart';
@@ -24,6 +25,7 @@ class AppData {
   String name = "";
   bool gameover = false;
   late GamePage game;
+  String myId = "";
 
   late WebSocketsHandler websocket;
 
@@ -70,9 +72,6 @@ class AppData {
     this.game = g;
     websocket = WebSocketsHandler();
     websocket.connectToServer(serverIp, name, serverMessageHandler);
-    game.overlays.remove('mainMenu');
-    game.overlays.add('waiting');
-    AppData.instance.gameover = false;
   }
 
   void serverMessageHandler(String message) {
@@ -81,8 +80,11 @@ class AppData {
     final data = json.decode(message);
 
     if (data is Map<String, dynamic>) {
-      if (data['type'] == 'loquesea') {
-        // lo que hay que hacer
+      if (data['type'] == 'welcome') {
+        myId = data['id'];
+        game.overlays.remove('mainMenu');
+        game.overlays.add('waiting');
+        AppData.instance.gameover = false;
       }
     }
   }
