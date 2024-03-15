@@ -57,7 +57,7 @@ class MainMenu extends StatelessWidget {
             ),
             ElevatedButton(
                 onPressed: () {
-                  AppData.instance.initializeWebsocket(_ipController.text, _nameController.text); 
+                  AppData.instance.initializeWebsocket(_ipController.text, _nameController.text, game); 
                 },
                 child: Text('Dale'))
           ],

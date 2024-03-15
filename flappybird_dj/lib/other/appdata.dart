@@ -55,13 +55,15 @@ class AppData {
     for (Bird b in playersList) {
       if (b.fainted) num += 1;
     }
-    if (num >= 4) {    //If all are fainted
+    if (num >= 4) {
+      //If all are fainted
       getScore();
-      gameover = true; 
+      gameover = true;
     }
   }
 
-  void initializeWebsocket(String serverIp, String name) {
+  void initializeWebsocket(String serverIp, String name, GamePage g) {
+    this.game = g;
     websocket = WebSocketsHandler();
     websocket.connectToServer(serverIp, name, serverMessageHandler);
     game.overlays.remove('mainMenu');
@@ -73,7 +75,7 @@ class AppData {
     print("Message recived: $message");
 
     final data = json.decode(message);
-    
+
     if (data is Map<String, dynamic>) {
       if (data['type'] == 'loquesea') {
         // lo que hay que hacer
