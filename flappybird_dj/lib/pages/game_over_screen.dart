@@ -17,7 +17,8 @@ class GameOverScreen extends StatelessWidget {
       color: Colors.black87,
       child: Center(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               width: MediaQuery.of(context).size.width / 2,
@@ -78,7 +79,6 @@ class GameOverScreen extends StatelessWidget {
   void restartGame() {
     game.overlays.add('mainMenu');
     game.overlays.remove('gameOver');
-    AppData.instance.resetGame();
-    //game.resumeEngine();
+    game.resetGame();
   }
 }

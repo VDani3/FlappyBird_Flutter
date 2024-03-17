@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 void main() {
   final gamePage = GamePage();
+  AppData.instance.game = gamePage;
   runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
       home: GameWidget(

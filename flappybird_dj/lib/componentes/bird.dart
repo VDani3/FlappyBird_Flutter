@@ -2,6 +2,9 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame_audio/flame_audio.dart';
+import 'package:flappybird_dj/componentes/ground.dart';
+import 'package:flappybird_dj/componentes/pipe.dart';
+import 'package:flappybird_dj/componentes/pipe_group.dart';
 import 'package:flappybird_dj/other/appdata.dart';
 import 'package:flappybird_dj/other/assets.dart';
 import 'package:flappybird_dj/other/birdmovement.dart';
@@ -18,7 +21,7 @@ class Bird extends SpriteGroupComponent<BirdMovement>
     this.fainted = f; //Temporal
   }
 
-  String name = "P1";
+  String name = "YOU";
   bool p1 = false;
   bool fainted = false;
   int score = 0;
@@ -30,7 +33,7 @@ class Bird extends SpriteGroupComponent<BirdMovement>
     final birdUpFlap = await gameRef.loadSprite(Assets.birdUpFlap[id]);
     final birdDownFlap = await gameRef.loadSprite(Assets.birdDownFlap[id]);
 
-    size = Vector2(50, 40);
+    size = Vector2(35, 35);
     position = Vector2(50, gameRef.size.y / 2 - size.y / 2);
     current = BirdMovement.middle;
     sprites = {
@@ -43,44 +46,48 @@ class Bird extends SpriteGroupComponent<BirdMovement>
       add(CircleHitbox());
       add(TextBoxComponent(
         text: name,
-        position: Vector2(position.x, -20),
+        position: Vector2(position.x+(size.x*2)*0.75, -20),
         anchor: Anchor.center,
         textRenderer: TextPaint(
-          style: TextStyle( fontWeight: FontWeight.bold, fontSize: 10)
+          style: TextStyle( fontWeight: FontWeight.bold, fontSize: 20)
         )
       ));
     }
   }
 
   void fly() {
-    add(MoveByEffect(
-      Vector2(0, Configuration.gravity),
-      EffectController(duration: 0.2, curve: Curves.decelerate),
-      onComplete: () => current = BirdMovement.down,
-    ));
-    current = BirdMovement.up;
-    FlameAudio.play(Assets.flying);
+    if (!fainted) {
+      add(MoveByEffect(
+        Vector2(0, Configuration.gravity),
+        EffectController(duration: 0.2, curve: Curves.decelerate),
+        onComplete: () => current = BirdMovement.down,
+      ));
+      current = BirdMovement.up;
+      FlameAudio.play(Assets.flying);
+    }
   }
 
   @override
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    AppData.instance.setFainted(id);
-    //gameOver();
+    if (other is PipeGroup || other is Pipe || other is Ground) {
+      fainted = true;
+      AppData.instance.setFainted(id);
+    }
   }
 
   void gameOver() {
     FlameAudio.play(Assets.collision);
     gameRef.overlays.add('gameOver');
     gameRef.pauseEngine();
-    game.isHit = true;
   }
 
   void reset() {
     position = Vector2(50, gameRef.size.y / 2 - size.y / 2);
+    name = "Waiting...";
     score = 0;
-    fainted = false;
+    //fainted = false;
   }
 
   @override

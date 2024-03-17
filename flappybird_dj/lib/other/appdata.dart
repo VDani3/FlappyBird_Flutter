@@ -17,15 +17,16 @@ class AppData {
   List<int> playerScore = [0, 0, 0, 0];
   List<Bird> playersList = [
     Bird(true, 0, false),
-    Bird(false, 1, true),
-    Bird(false, 2, true),
-    Bird(false, 3, true)
+    Bird(false, 1, false),
+    Bird(false, 2, false),
+    Bird(false, 3, false)
   ];
 
   String name = "";
   bool gameover = false;
   late GamePage game;
   String myId = "";
+  int myIdNum = 0;
 
   late WebSocketsHandler websocket;
 
@@ -90,17 +91,6 @@ class AppData {
         game.overlays.add('waiting');
         AppData.instance.gameover = false;
       }
-    }
-  }
-
-  void resetPlayerList() {
-    for (Bird player in playersList) {
-      player.name = "Waiting...";
-      player.p1 = false;
-      player.fainted = false;
-      player.score = 0;
-      player.id = 0;
-      player.position = Vector2(50, game.size.y / 2 - player.size.y / 2);
     }
   }
 }
