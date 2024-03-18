@@ -52,9 +52,9 @@ class _WaitingRoomState extends State<WaitingRoom> {
                   width: 20,
                 ),
                 Text(
-                  data.getPlayerName(index) == "YOU" || data.getPlayerName(index) == "P1"
+                  data.playersList[index].name == "YOU" ||  data.playersList[index].name == "P1"
                       ? "Waiting..."
-                      : data.getPlayerName(index),
+                      :  data.playersList[index].name,
                   style: TextStyle(
                     fontFamily: 'Game',
                     fontSize: 40,

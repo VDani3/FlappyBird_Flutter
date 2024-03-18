@@ -48,7 +48,7 @@ class MainMenu extends StatelessWidget {
                 controller: _ipController,
                 decoration: InputDecoration(
                   labelText: 'IP:Port',
-                  border: OutlineInputBorder(),
+                  border: OutlineInputBorder()
                 ),
               ),
             ),
@@ -57,7 +57,7 @@ class MainMenu extends StatelessWidget {
             ),
             ElevatedButton(
                 onPressed: () {
-                  AppData.instance.initializeWebsocket(_ipController.text, _nameController.text, game); 
+                  AppData.instance.initializeWebsocket(/*_ipController.text*/"localhost:8888", _nameController.text, game); 
                 },
                 child: Text('Dale'))
           ],

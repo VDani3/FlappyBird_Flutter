@@ -12,12 +12,13 @@ const debug = true
         - Player loose          { "type": "loose", "puntuation": 0}
 
     From server to client:
-        - Welcome message       { "type": "welcome", "value": "Welcome to the server", "id": 'ABC123' }
+        - Welcome message       { "type": "welcome", "value": "Welcome to the server", "id": 'ABC123', "list": [] }
         - If Server is full     { "type": "error", "value": "Server is full"}
+        - Connected list        { "type": "waitingList", "value":"Waiting players", "data": [{"id": 'ABC123', "name": 'Abcd', "x": 0, "y": 0 }, {"id": 'XYZ789', "name": 'Wxyz', "x": 0, "y": 0 }] }
         
     From server to everybody (broadcast):
         - All clients data      { "type": "data", "data": [{"id": 'ABC123', "name": 'Abcd', "x": 0, "y": 0 }, {"id": 'XYZ789', "name": 'Wxyz', "x": 0, "y": 0 }] }
-        - Someone connects      { "type": "newClient", id: 'ABC123' }
+        - Someone connects      { "type": "newClient", id: 'ABC123', "name": "Abcd" }
         - Start game            { "type": "start", "data": ""}
         - Someone loose         { "type": "lost", "data": "{"id": 'ABC123', "name": 'Abcd', "x": 0, "y": 0 }"}
         - All clients lost      { "type": "finnish", "data":"[{ "name": 'Abcd', "puntuation": 0 }, { "name": 'Wxyz', "puntuation": 0 }]"}
@@ -96,6 +97,14 @@ ws.onMessage = (socket, id, msg) => {
   switch (obj.type) {
     case "init":
       clientData.name = obj.name
+      let allClientsData = ws.getClientsData()
+      if (allClientsData != null) {
+        socket.send(JSON.stringify({
+          type: "waitingList",
+          value: "Waiting players",
+          data: allClientsData
+        }))
+      }
       break;
     case "move":
       clientData.x = obj.x
@@ -132,7 +141,7 @@ gLoop.run = (fps) => {
   if (clientsData.length === 4) {
     gameStarted = true;
     if (!startMessageSended) {
-      ws.broadcast(JSON.stringify({ type: "start" }))
+      ws.broadcast(JSON.stringify({ type: "start", data: "" }))
     }
     startMessageSended = true;
   }
