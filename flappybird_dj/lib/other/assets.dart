@@ -11,23 +11,23 @@ class Assets {
   static const pipeRotated = "pipe_rotated.png";
 
   //Bird Assets
-  static const birdMidFlap = [
-    "bird_midflap.png",
-    "bird_midflap.png",
-    "bird_midflap.png",
-    "bird_midflap.png"
+    static const birdMidFlap = [
+    "ball_0.png",
+    "ball_1.png",
+    "ball_2.png",
+    "ball_3.png"
   ];
   static const birdUpFlap = [
-    "bird_upflap.png",
-    "bird_upflap.png",
-    "bird_upflap.png",
-    "bird_upflap.png"
+    "ball_0.png",
+    "ball_1.png",
+    "ball_2.png",
+    "ball_3.png"
   ];
   static const birdDownFlap = [
-    "bird_downflap.png",
-    "bird_downflap.png",
-    "bird_downflap.png",
-    "bird_downflap.png"
+    "ball_0.png",
+    "ball_1.png",
+    "ball_2.png",
+    "ball_3.png"
   ];
 
   //UI Assets

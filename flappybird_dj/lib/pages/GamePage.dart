@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 class GamePage extends FlameGame with TapDetector, HasCollisionDetection {
   GamePage();
 
-  late Bird bird, bird2, bird3;
+  late Bird bird, bird2, bird3, bird4;
   late TextBoxComponent score;
   Timer interval = Timer(Configuration.pipeInterval, repeat: true);
   bool isHit = false;
@@ -26,7 +26,7 @@ class GamePage extends FlameGame with TapDetector, HasCollisionDetection {
       bird = AppData.instance.playersList[0],
       bird2 = AppData.instance.playersList[1],
       bird3 = AppData.instance.playersList[2],
-      bird3 = AppData.instance.playersList[3],
+      bird4 = AppData.instance.playersList[3],
       score = buildScore(),
     ]);
 
@@ -48,7 +48,7 @@ class GamePage extends FlameGame with TapDetector, HasCollisionDetection {
   @override
   void onTap() {
     super.onTap();
-    bird.fly();
+    AppData.instance.playersList[AppData.instance.myIdNum].fly();
   }
 
   @override
@@ -58,4 +58,27 @@ class GamePage extends FlameGame with TapDetector, HasCollisionDetection {
 
     score.text = "Score: ${bird.score}";
   }
+
+    void resetGame() {
+    AppData.instance.gameover = false;
+    for (final child in children) {
+      remove(child);
+    }
+
+    // Add new birds
+    AppData.instance.playersList[0].position = Vector2(50, size.y / 2 - bird.size.y / 2);
+    AppData.instance.playersList[1].position = Vector2(50, size.y / 2 - bird2.size.y / 2);
+    AppData.instance.playersList[2].position = Vector2(50, size.y / 2 - bird3.size.y / 2);
+    AppData.instance.playersList[3].position = Vector2(50, size.y / 2 - bird4.size.y / 2);
+    // Reiniciar estado de los personajes
+    AppData.instance.playersList[0].reset();
+    AppData.instance.playersList[0].fainted = false;
+    AppData.instance.playersList[1].reset();
+    AppData.instance.playersList[2].reset();
+    AppData.instance.playersList[3].reset();
+
+    addAll([Background(), Ground(), AppData.instance.playersList[0], AppData.instance.playersList[1], AppData.instance.playersList[2], AppData.instance.playersList[3],]);
+
+  }
 }
+
