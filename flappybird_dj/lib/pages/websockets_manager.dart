@@ -40,6 +40,7 @@ class WebSocketsHandler {
         print("Error WebSocketHandler: $error\n");
         AppData.instance.game.overlays.add('mainMenu');
         AppData.instance.game.overlays.removeAll(['waiting', 'gameOver', 'countdown']);
+        AppData.instance.game.pauseEngine();
       },
       onDone: () {
         connectionStatus = ConnectionStatus.disconnected;
@@ -47,6 +48,7 @@ class WebSocketsHandler {
         print("Done WebSocketHandler\n");
         AppData.instance.game.overlays.add('mainMenu');
         AppData.instance.game.overlays.removeAll(['waiting', 'gameOver', 'countdown']);
+        AppData.instance.game.pauseEngine();
       },
     );
   }

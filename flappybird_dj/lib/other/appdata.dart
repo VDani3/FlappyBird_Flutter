@@ -106,7 +106,9 @@ class AppData extends ChangeNotifier{
           if (list[i]['id'] == myId) {
             myIdNum = i;
             playersList[i].p1 = true;
+            game.resetGame();
           }
+          print(playersList[i].p1);
         }
         notifyListeners();
         if (game.overlays.isActive('mainMenu')) {
@@ -129,6 +131,17 @@ class AppData extends ChangeNotifier{
             playersList[i].position.y = double.parse(list[i]['y']);
           }
         }
+      } else 
+      if (data['type'] == 'lost') {
+        int posList = int.parse(data['positionList']);
+        playersList[posList].fainted = true;
+      } else 
+      if (data['type'] == 'finnish') {
+        List<dynamic> list = data['data'];
+        for (int i=0; i < list.length ; i++) {
+          playersList[i].score = int.parse(list[i]['puntuation']);
+        }
+        game.overlays.add("gameover");
       }
 
       
@@ -144,5 +157,10 @@ class AppData extends ChangeNotifier{
 
       websocket.sendMessage('{ "type": "move", "x": "$myX", "y": "$myY" }');
     }
+  }
+
+  void sendFainted() {
+    int myScore = playersList[myIdNum].score;
+    websocket.sendMessage('{  "type": "loose", "puntuation": "$myScore" }');
   }
 }

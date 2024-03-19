@@ -9,7 +9,7 @@ const debug = true
     From client to server:
         - Client init           { "type": "init", "name": "name" }
         - Player movement       { "type": "move", "x": 0, "y": 0 }
-        - Player loose          { "type": "loose", "puntuation": 0}
+        - Player loose          { "type": "loose", "puntuation": 0, "positionList": 0}
 
     From server to client:
         - Welcome message       { "type": "welcome", "value": "Welcome to the server", "id": 'ABC123', "list": [] }
@@ -20,7 +20,7 @@ const debug = true
         - All clients data      { "type": "data", "data": [{"id": 'ABC123', "name": 'Abcd', "x": 0, "y": 0 }, {"id": 'XYZ789', "name": 'Wxyz', "x": 0, "y": 0 }] }
         - Someone connects      { "type": "newClient", id: 'ABC123', "name": "Abcd" }
         - Start game            { "type": "start", "data": ""}
-        - Someone loose         { "type": "lost", "data": "{"id": 'ABC123', "name": 'Abcd', "x": 0, "y": 0 }"}
+        - Someone loose         { "type": "lost", "positionList": 0 }
         - All clients lost      { "type": "finnish", "data":"[{ "name": 'Abcd', "puntuation": 0 }, { "name": 'Wxyz', "puntuation": 0 }]"}
 */
 
@@ -108,6 +108,7 @@ ws.onMessage = (socket, id, msg) => {
         
         if (allClientsData.length === 4) {
           gameStarted = true;
+          console.log('game started');
           if (!startMessageSended) {
             ws.broadcast(JSON.stringify({ type: "start", data: "" }))
           }
@@ -121,9 +122,10 @@ ws.onMessage = (socket, id, msg) => {
       break
     case "loose":
       clientData.puntuation = obj.puntuation
+      var posList = obj.positionList
       ws.broadcast(JSON.stringify({
         type: "lost", 
-        data: clientData
+        positionList: posList
       }))
       playerLost.push(JSON.stringify({ name: clientData.name, puntuation: clientData.puntuation }))
   }
@@ -147,8 +149,10 @@ gLoop.run = (fps) => {
   let clientsData = ws.getClientsData()
 
   // Gestionar aquí la partida, estats i final
-  if (clientsData.length === 0) {
+  if (clientsData.length === 0 && startMessageSended) {
     gameStarted = false;
+    startMessageSended = false;
+    console.log('game ended');
   }
 
   if (gameStarted && startMessageSended) {
@@ -158,6 +162,9 @@ gLoop.run = (fps) => {
 
   if (playerLost.length === 4) {
     gameLoop = false;
+    gameStarted = false;
+    startMessageSended = false;
+    console.log('game ended');
     ws.broadcast(JSON.stringify({ type: "finnish", data: playerLost }))
     playerLost = []
   }
