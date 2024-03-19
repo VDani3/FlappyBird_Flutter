@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flame/input.dart';
@@ -8,7 +9,7 @@ import 'package:flutter/material.dart';
 
 import '../pages/websockets_manager.dart';
 
-class AppData {
+class AppData extends ChangeNotifier{
   static AppData instance = AppData();
 
   AppData();
@@ -22,7 +23,7 @@ class AppData {
     Bird(false, 3, false)
   ];
 
-  String name = "";
+  String myName = "";
   bool gameover = false;
   late GamePage game;
   String myId = "";
@@ -76,7 +77,8 @@ class AppData {
   void initializeWebsocket(String serverIp, String name, GamePage g) {
     this.game = g;
     websocket = WebSocketsHandler();
-    websocket.connectToServer(serverIp, name, serverMessageHandler);
+    websocket.connectToServer(serverIp, serverMessageHandler);
+    myName = name;
   }
 
   void serverMessageHandler(String message) {
@@ -86,7 +88,19 @@ class AppData {
 
     if (data is Map<String, dynamic>) {
       if (data['type'] == 'welcome') {
+        websocket.sendMessage('{ "type": "init", "name": "$myName"}');
+        sleep(Duration(seconds: 1));
         myId = data['id'];
+      }
+      if (data['type'] == 'waitingList') {
+        List<dynamic> list = data['data'];
+        print(list);
+        for (int i=0; i < list.length ; i++) {
+          playersList[i].name = list[i]['name'];
+          notifyListeners();
+          if (list[i]['id'] == myId) myIdNum = i ;
+          print(playersList[i].name);
+        }
         game.overlays.remove('mainMenu');
         game.overlays.add('waiting');
         AppData.instance.gameover = false;

@@ -18,7 +18,7 @@ class WebSocketsHandler {
 
   String? mySocketId;
 
-  void connectToServer(String serverIp,String name, void Function(String message) callback) async {
+  void connectToServer(String serverIp, void Function(String message) callback) async {
     //connection settings
     _callback = callback;
     ip = serverIp;
@@ -46,7 +46,6 @@ class WebSocketsHandler {
         connectionStatus = ConnectionStatus.disconnected;
         mySocketId = "";
         print("Done WebSocketHandler\n");
-        sendMessage('{ "type": "init", "name": $name }');
       },
     );
   }

@@ -44,7 +44,7 @@ class Assets {
   static const fontColors = [
     Colors.red,
     Colors.blue,
-    Colors.yellow,
+    Color.fromARGB(255, 236, 218, 54),
     Colors.green
   ];
 }
