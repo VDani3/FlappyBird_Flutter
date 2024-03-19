@@ -1,13 +1,9 @@
+import 'package:flappybird_dj/other/appdata.dart';
 import 'package:flutter/foundation.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart';
 
-enum ConnectionStatus {
-  disconnected,
-  disconnecting,
-  connecting,
-  connected
-}
+enum ConnectionStatus { disconnected, disconnecting, connecting, connected }
 
 class WebSocketsHandler {
   late Function _callback;
@@ -18,7 +14,8 @@ class WebSocketsHandler {
 
   String? mySocketId;
 
-  void connectToServer(String serverIp, void Function(String message) callback) async {
+  void connectToServer(
+      String serverIp, void Function(String message) callback) async {
     //connection settings
     _callback = callback;
     ip = serverIp;
@@ -31,7 +28,7 @@ class WebSocketsHandler {
 
     _socketClient = IOWebSocketChannel.connect("ws://$ip");
     _socketClient!.stream.listen(
-      (message) { 
+      (message) {
         if (connectionStatus != ConnectionStatus.connected) {
           connectionStatus = ConnectionStatus.connected;
         }
@@ -41,11 +38,15 @@ class WebSocketsHandler {
         connectionStatus = ConnectionStatus.disconnected;
         mySocketId = "";
         print("Error WebSocketHandler: $error\n");
+        AppData.instance.game.overlays.add('mainMenu');
+        AppData.instance.game.overlays.removeAll(['waiting', 'gameOver', 'countdown']);
       },
       onDone: () {
         connectionStatus = ConnectionStatus.disconnected;
         mySocketId = "";
         print("Done WebSocketHandler\n");
+        AppData.instance.game.overlays.add('mainMenu');
+        AppData.instance.game.overlays.removeAll(['waiting', 'gameOver', 'countdown']);
       },
     );
   }

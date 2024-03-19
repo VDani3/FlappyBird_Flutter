@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
 
@@ -17,7 +18,7 @@ class AppData extends ChangeNotifier{
   //Variables
   List<int> playerScore = [0, 0, 0, 0];
   List<Bird> playersList = [
-    Bird(true, 0, false),
+    Bird(false, 0, false),
     Bird(false, 1, false),
     Bird(false, 2, false),
     Bird(false, 3, false)
@@ -30,6 +31,7 @@ class AppData extends ChangeNotifier{
   int myIdNum = 0;
 
   late WebSocketsHandler websocket;
+  bool wsIsOn = false;
 
   //Functions
   static AppData getInstance() {
@@ -79,8 +81,11 @@ class AppData extends ChangeNotifier{
     websocket = WebSocketsHandler();
     websocket.connectToServer(serverIp, serverMessageHandler);
     myName = name;
+    wsIsOn = true;
   }
 
+  //////////////////////////////////////////////
+  //////////////////////////////////////////////
   void serverMessageHandler(String message) {
     print("Message recived: $message");
 
@@ -91,13 +96,17 @@ class AppData extends ChangeNotifier{
         websocket.sendMessage('{ "type": "init", "name": "$myName"}');
         sleep(Duration(seconds: 1));
         myId = data['id'];
+        gameover = false;
       } else
       if (data['type'] == 'waitingList') {
         List<dynamic> list = data['data'];
         print(list);
         for (int i=0; i < list.length ; i++) {
           playersList[i].name = list[i]['name'];
-          if (list[i]['id'] == myId) myIdNum = i ;
+          if (list[i]['id'] == myId) {
+            myIdNum = i;
+            playersList[i].p1 = true;
+          }
         }
         notifyListeners();
         if (game.overlays.isActive('mainMenu')) {
@@ -107,14 +116,33 @@ class AppData extends ChangeNotifier{
           game.overlays.remove('waiting');
           game.overlays.add('waiting');
         }
-        AppData.instance.gameover = false;
       } else
       if (data['type'] == 'start') {
         game.overlays.add('countdown');
         game.overlays.remove('waiting');
+      } else 
+      if (data['type'] == 'data') {
+        List<dynamic> list = data['data'];
+        for (int i=0; i < list.length ; i++) {
+          if (list[i]['id'] != myId) {
+            playersList[i].position.x = double.parse(list[i]['x']);
+            playersList[i].position.y = double.parse(list[i]['y']);
+          }
+        }
       }
 
       
+    }
+  }
+  //////////////////////////////////////////////
+  //////////////////////////////////////////////
+  
+  void sendMyPosition() {
+    if (wsIsOn) {
+      double myX = playersList[myIdNum].position.x;
+      double myY = playersList[myIdNum].position.y;
+
+      websocket.sendMessage('{ "type": "move", "x": "$myX", "y": "$myY" }');
     }
   }
 }

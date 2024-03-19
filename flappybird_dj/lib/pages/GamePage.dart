@@ -13,7 +13,6 @@ import 'package:provider/provider.dart';
 class GamePage extends FlameGame with TapDetector, HasCollisionDetection {
   GamePage();
 
-  late Bird bird, bird2, bird3, bird4;
   late TextBoxComponent score;
   Timer interval = Timer(Configuration.pipeInterval, repeat: true);
   bool isHit = false;
@@ -23,10 +22,10 @@ class GamePage extends FlameGame with TapDetector, HasCollisionDetection {
     addAll([
       Background(),
       Ground(),
-      bird = AppData.instance.playersList[0],
-      bird2 = AppData.instance.playersList[1],
-      bird3 = AppData.instance.playersList[2],
-      bird4 = AppData.instance.playersList[3],
+      AppData.instance.playersList[0],
+      AppData.instance.playersList[1],
+      AppData.instance.playersList[2],
+      AppData.instance.playersList[3],
       score = buildScore(),
     ]);
 
@@ -56,7 +55,9 @@ class GamePage extends FlameGame with TapDetector, HasCollisionDetection {
     super.update(dt);
     interval.update(dt);
 
-    score.text = "Score: ${bird.score}";
+    score.text = "Score: ${AppData.instance.playersList[AppData.instance.myIdNum].score}";
+
+    AppData.instance.sendMyPosition();
   }
 
     void resetGame() {
@@ -66,10 +67,10 @@ class GamePage extends FlameGame with TapDetector, HasCollisionDetection {
     }
 
     // Add new birds
-    AppData.instance.playersList[0].position = Vector2(50, size.y / 2 - bird.size.y / 2);
-    AppData.instance.playersList[1].position = Vector2(50, size.y / 2 - bird2.size.y / 2);
-    AppData.instance.playersList[2].position = Vector2(50, size.y / 2 - bird3.size.y / 2);
-    AppData.instance.playersList[3].position = Vector2(50, size.y / 2 - bird4.size.y / 2);
+    AppData.instance.playersList[0].position = Vector2(50, size.y / 2 - AppData.instance.playersList[0].size.y / 2);
+    AppData.instance.playersList[1].position = Vector2(50, size.y / 2 - AppData.instance.playersList[1].size.y / 2);
+    AppData.instance.playersList[2].position = Vector2(50, size.y / 2 - AppData.instance.playersList[2].size.y / 2);
+    AppData.instance.playersList[3].position = Vector2(50, size.y / 2 - AppData.instance.playersList[3].size.y / 2);
     // Reiniciar estado de los personajes
     AppData.instance.playersList[0].reset();
     AppData.instance.playersList[0].fainted = false;

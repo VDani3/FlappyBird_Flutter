@@ -147,17 +147,13 @@ gLoop.run = (fps) => {
   let clientsData = ws.getClientsData()
 
   // Gestionar aquí la partida, estats i final
-  // if (clientsData.length === 4) {
-  //   gameStarted = true;
-  //   if (!startMessageSended) {
-  //     ws.broadcast(JSON.stringify({ type: "start", data: "" }))
-  //   }
-  //   startMessageSended = true;
-  // }
+  if (clientsData.length === 0) {
+    gameStarted = false;
+  }
 
   if (gameStarted && startMessageSended) {
     console.log(clientsData)
-    ws.broadcast(JSON.stringify({ type: "data", value: clientsData }))
+    ws.broadcast(JSON.stringify({ type: "data", data: clientsData }))
   } 
 
   if (playerLost.length === 4) {

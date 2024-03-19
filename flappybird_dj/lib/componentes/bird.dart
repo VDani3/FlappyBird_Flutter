@@ -18,7 +18,6 @@ class Bird extends SpriteGroupComponent<BirdMovement>
   Bird(bool p, int i, bool f) : super() {
     this.p1 = p;
     this.id = i;
-    this.fainted = f; //Temporal
   }
 
   String name = "YOU";
