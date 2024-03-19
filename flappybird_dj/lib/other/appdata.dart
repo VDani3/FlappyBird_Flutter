@@ -91,7 +91,7 @@ class AppData extends ChangeNotifier{
         websocket.sendMessage('{ "type": "init", "name": "$myName"}');
         sleep(Duration(seconds: 1));
         myId = data['id'];
-      }
+      } else
       if (data['type'] == 'waitingList') {
         List<dynamic> list = data['data'];
         print(list);
@@ -101,14 +101,19 @@ class AppData extends ChangeNotifier{
         }
         notifyListeners();
         if (game.overlays.isActive('mainMenu')) {
-          game.overlays.remove('mainMenu');
           game.overlays.add('waiting');
+          game.overlays.remove('mainMenu');
         } else {
           game.overlays.remove('waiting');
           game.overlays.add('waiting');
         }
         AppData.instance.gameover = false;
+      } else
+      if (data['type'] == 'start') {
+        game.overlays.add('countdown');
+        game.overlays.remove('waiting');
       }
+
       
     }
   }

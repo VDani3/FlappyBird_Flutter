@@ -104,6 +104,15 @@ ws.onMessage = (socket, id, msg) => {
           value: "Waiting players",
           data: allClientsData
         }))
+
+        
+        if (allClientsData.length === 4) {
+          gameStarted = true;
+          if (!startMessageSended) {
+            ws.broadcast(JSON.stringify({ type: "start", data: "" }))
+          }
+          startMessageSended = true;
+        }
       }
       break;
     case "move":
@@ -138,20 +147,18 @@ gLoop.run = (fps) => {
   let clientsData = ws.getClientsData()
 
   // Gestionar aquí la partida, estats i final
-  if (clientsData.length === 4) {
-    gameStarted = true;
-    if (!startMessageSended) {
-      ws.broadcast(JSON.stringify({ type: "start", data: "" }))
-    }
-    startMessageSended = true;
-  }
+  // if (clientsData.length === 4) {
+  //   gameStarted = true;
+  //   if (!startMessageSended) {
+  //     ws.broadcast(JSON.stringify({ type: "start", data: "" }))
+  //   }
+  //   startMessageSended = true;
+  // }
 
-  if (gameStarted) {
+  if (gameStarted && startMessageSended) {
     console.log(clientsData)
     ws.broadcast(JSON.stringify({ type: "data", value: clientsData }))
-  } else {
-
-  }
+  } 
 
   if (playerLost.length === 4) {
     gameLoop = false;
