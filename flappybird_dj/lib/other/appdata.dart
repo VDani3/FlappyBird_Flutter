@@ -97,14 +97,19 @@ class AppData extends ChangeNotifier{
         print(list);
         for (int i=0; i < list.length ; i++) {
           playersList[i].name = list[i]['name'];
-          notifyListeners();
           if (list[i]['id'] == myId) myIdNum = i ;
-          print(playersList[i].name);
         }
-        game.overlays.remove('mainMenu');
-        game.overlays.add('waiting');
+        notifyListeners();
+        if (game.overlays.isActive('mainMenu')) {
+          game.overlays.remove('mainMenu');
+          game.overlays.add('waiting');
+        } else {
+          game.overlays.remove('waiting');
+          game.overlays.add('waiting');
+        }
         AppData.instance.gameover = false;
       }
+      
     }
   }
 

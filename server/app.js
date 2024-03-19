@@ -99,7 +99,7 @@ ws.onMessage = (socket, id, msg) => {
       clientData.name = obj.name
       let allClientsData = ws.getClientsData()
       if (allClientsData != null) {
-        socket.send(JSON.stringify({
+        ws.broadcast(JSON.stringify({
           type: "waitingList",
           value: "Waiting players",
           data: allClientsData
@@ -147,7 +147,7 @@ gLoop.run = (fps) => {
   }
 
   if (gameStarted) {
-    console.log(clientsData)  
+    console.log(clientsData)
     ws.broadcast(JSON.stringify({ type: "data", value: clientsData }))
   } else {
 
