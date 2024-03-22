@@ -15,9 +15,11 @@ import 'package:flutter/material.dart';
 
 class Bird extends SpriteGroupComponent<BirdMovement>
     with HasGameRef<GamePage>, CollisionCallbacks {
-  Bird(bool p, int i, bool f) : super() {
+
+  Bird({bool p = false, String name = "YOU", id = 0}) : super() {
     this.p1 = p;
-    this.id = i;
+    this.name = name;
+    this.id = id;
   }
 
   String name = "YOU";

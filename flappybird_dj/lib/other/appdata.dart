@@ -18,10 +18,10 @@ class AppData extends ChangeNotifier{
   //Variables
   List<int> playerScore = [0, 0, 0, 0];
   List<Bird> playersList = [
-    Bird(false, 0, false),
-    Bird(false, 1, false),
-    Bird(false, 2, false),
-    Bird(false, 3, false)
+    Bird(id: 0),
+    Bird(id: 1),
+    Bird(id: 2),
+    Bird(id: 3)
   ];
 
   String myName = "";
@@ -47,9 +47,23 @@ class AppData extends ChangeNotifier{
   }
 
   void resetGame() {
-    for (int i = 0; i < playersList.length; i++) {
-      playersList[i].reset();
+    playersList.clear();
+    for (int i = 0; i < 4; i++) {
+      playersList.add(Bird());
     }
+  }
+
+  void setPlayers(){
+    List<Bird> tempList = [];
+    for (Bird b in playersList) {
+      if (b.p1) {
+        tempList.add(Bird(p: true, name: b.name, id: b.id));
+      } else {
+        tempList.add(Bird(name: b.name, id: b.id));
+      }
+    }
+    playersList.clear();
+    playersList = tempList;
   }
 
   void getScore() {
@@ -100,7 +114,6 @@ class AppData extends ChangeNotifier{
       } else
       if (data['type'] == 'waitingList') {
         List<dynamic> list = data['data'];
-        print(list);
         for (int i=0; i < list.length ; i++) {
           playersList[i].name = list[i]['name'];
           if (list[i]['id'] == myId) {
@@ -108,7 +121,6 @@ class AppData extends ChangeNotifier{
             playersList[i].p1 = true;
             game.resetGame();
           }
-          print(playersList[i].p1);
         }
         notifyListeners();
         if (game.overlays.isActive('mainMenu')) {
@@ -120,6 +132,8 @@ class AppData extends ChangeNotifier{
         }
       } else
       if (data['type'] == 'start') {
+        setPlayers();
+        game.resetGame();
         game.overlays.add('countdown');
         game.overlays.remove('waiting');
       } else 

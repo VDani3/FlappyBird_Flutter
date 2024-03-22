@@ -60,27 +60,21 @@ class GamePage extends FlameGame with TapDetector, HasCollisionDetection {
     AppData.instance.sendMyPosition();
   }
 
-    void resetGame() {
-    AppData.instance.gameover = false;
-    for (final child in children) {
-      remove(child);
-    }
+  void resetGame() {
 
-    // Add new birds
-    AppData.instance.playersList[0].position = Vector2(50, size.y / 2 - AppData.instance.playersList[0].size.y / 2);
-    AppData.instance.playersList[1].position = Vector2(50, size.y / 2 - AppData.instance.playersList[1].size.y / 2);
-    AppData.instance.playersList[2].position = Vector2(50, size.y / 2 - AppData.instance.playersList[2].size.y / 2);
-    AppData.instance.playersList[3].position = Vector2(50, size.y / 2 - AppData.instance.playersList[3].size.y / 2);
-    // Reiniciar estado de los personajes
-    /*
-    AppData.instance.playersList[0].reset();
-    AppData.instance.playersList[0].fainted = false;
-    AppData.instance.playersList[1].reset();
-    AppData.instance.playersList[2].reset();
-    AppData.instance.playersList[3].reset();
-    */
+    onLoad(); // Re-initialize the game state
 
-    addAll([Background(), Ground(), AppData.instance.playersList[0], AppData.instance.playersList[1], AppData.instance.playersList[2], AppData.instance.playersList[3],]);
+    /*addAll([
+      Background(),
+      Ground(),
+      AppData.instance.playersList[0],
+      AppData.instance.playersList[1],
+      AppData.instance.playersList[2],
+      AppData.instance.playersList[3],
+    ]);*/
+
+    interval = Timer(Configuration.pipeInterval, repeat: true); 
+    interval.onTick = () => add(PipeGroup()); 
 
   }
 }
