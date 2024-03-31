@@ -20,7 +20,7 @@ class GamePage extends FlameGame with TapDetector, HasCollisionDetection {
   @override
   Future<void> onLoad() async {
     addAll([
-      //Background(),
+      Background(),
       Ground(),
       AppData.instance.playersList[0],
       AppData.instance.playersList[1],
@@ -29,7 +29,7 @@ class GamePage extends FlameGame with TapDetector, HasCollisionDetection {
       score = buildScore(),
     ]);
 
-    interval.onTick = () => add(PipeGroup());
+    
   }
 
   TextBoxComponent buildScore() {
@@ -73,8 +73,7 @@ class GamePage extends FlameGame with TapDetector, HasCollisionDetection {
       AppData.instance.playersList[3],
     ]);*/
 
-    interval = Timer(Configuration.pipeInterval, repeat: true); 
-    interval.onTick = () => add(PipeGroup()); 
+    
 
   }
 }

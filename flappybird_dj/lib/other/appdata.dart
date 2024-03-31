@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:flame/input.dart';
 import 'package:flappybird_dj/componentes/bird.dart';
+import 'package:flappybird_dj/componentes/pipe_group.dart';
 import 'package:flappybird_dj/other/birdmovement.dart';
 import 'package:flappybird_dj/pages/GamePage.dart';
 import 'package:flutter/material.dart';
@@ -150,6 +151,9 @@ class AppData extends ChangeNotifier{
           }
         }
       } else 
+      if(data["type"] == "pipe"){
+        game.add(PipeGroup(data["spacing"], data["centerY"]));
+      } else
       if (data['type'] == 'lost') {
         int posList = int.parse(data['positionList']);
         playersList[posList].fainted = true;
@@ -162,7 +166,7 @@ class AppData extends ChangeNotifier{
           playersList[i].score = int.parse(list[i]['puntuation']);
         }
         game.overlays.add("gameover");
-      }
+      } 
 
       
     }

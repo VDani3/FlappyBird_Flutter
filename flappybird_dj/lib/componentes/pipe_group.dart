@@ -10,8 +10,11 @@ import 'package:flappybird_dj/other/pipe_position.dart';
 import 'package:flappybird_dj/pages/GamePage.dart';
 
 class PipeGroup extends PositionComponent with HasGameRef<GamePage> {
-  PipeGroup();
 
+  final double spacing;
+  final double centerY;
+
+  PipeGroup(this.spacing, this.centerY);
   final _random = Random();
 
   @override
@@ -19,9 +22,9 @@ class PipeGroup extends PositionComponent with HasGameRef<GamePage> {
     position.x = gameRef.size.x;
 
     final heightMinusGround = gameRef.size.y - Configuration.groundHeight;
-    final spacing = 100 + _random.nextDouble() * (heightMinusGround / 4);
+    /*final spacing = 100 + _random.nextDouble() * (heightMinusGround / 4);
     final centerY =
-        spacing + _random.nextDouble() * (heightMinusGround - spacing);
+        spacing + _random.nextDouble() * (heightMinusGround - spacing);*/
     addAll([
       Pipe(height: centerY - spacing / 2, pipePosition: PipePosition.top),
       Pipe(

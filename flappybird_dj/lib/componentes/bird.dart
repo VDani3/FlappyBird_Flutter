@@ -99,7 +99,6 @@ class Bird extends SpriteGroupComponent<BirdMovement>
   @override
   void update(double dt) {
     super.update(dt);
-    print(fainted);
     if (p1 && !fainted) position.y += Configuration.birdVelocity * dt;
     if (position.y <= 0 && p1) {
       //gameOver();

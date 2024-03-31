@@ -22,6 +22,7 @@ const debug = true
         - Start game            { "type": "start", "data": ""}
         - Someone loose         { "type": "lost", "positionList": 0 }
         - All clients lost      { "type": "finnish", "data":"[{ "name": 'Abcd', "puntuation": 0 }, { "name": 'Wxyz', "puntuation": 0 }]"}
+        - Pipe group            { "type": "pipe", "spacing": 0.3, "centerY": 0.1}
 */
 
 ///////////////////
@@ -31,7 +32,7 @@ const debug = true
 var gameStarted = false;
 var startMessageSended = false;
 var playerLost = [];
-
+var pipeTimer = 0;
 
 var ws = new webSockets()
 var gLoop = new gameLoop()
@@ -147,11 +148,24 @@ gLoop.run = (fps) => {
   // Aquest mètode s'intenta executar 30 cops per segon
 
   let clientsData = ws.getClientsData()
+  
+  // Mandem una pipe cada x segons
+  if (gameStarted) {
+    pipeTimer += 1/fps;
+
+    if (pipeTimer >= 5.5) {
+      const rSpacing =  100 + Math.random() * (500 / 4);
+      const centerY = rSpacing + Math.random() * (500 - rSpacing);
+      ws.broadcast(JSON.stringify({type: "pipe", spacing: rSpacing, centerY: centerY}));
+      pipeTimer = 0;
+    }
+  }
 
   // Gestionar aquí la partida, estats i final
   if (clientsData.length === 0 && startMessageSended) {
     gameStarted = false;
     startMessageSended = false;
+    pipeTimer = 0;
     console.log('game ended');
   }
 
@@ -166,6 +180,7 @@ gLoop.run = (fps) => {
     startMessageSended = false;
     console.log('game ended');
     ws.broadcast(JSON.stringify({ type: "finnish", data: playerLost }))
+    pipeTimer = 0;
     playerLost = []
   }
 
