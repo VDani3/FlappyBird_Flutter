@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:flame/input.dart';
 import 'package:flappybird_dj/componentes/bird.dart';
+import 'package:flappybird_dj/other/birdmovement.dart';
 import 'package:flappybird_dj/pages/GamePage.dart';
 import 'package:flutter/material.dart';
 
@@ -29,6 +30,7 @@ class AppData extends ChangeNotifier{
   late GamePage game;
   String myId = "";
   int myIdNum = 0;
+  bool charging = false;
 
   late WebSocketsHandler websocket;
   bool wsIsOn = false;
@@ -54,6 +56,7 @@ class AppData extends ChangeNotifier{
   }
 
   void setPlayers(){
+    gameover = false;
     List<Bird> tempList = [];
     for (Bird b in playersList) {
       if (b.p1) {
@@ -143,14 +146,17 @@ class AppData extends ChangeNotifier{
           if (list[i]['id'] != myId) {
             playersList[i].position.x = double.parse(list[i]['x']);
             playersList[i].position.y = double.parse(list[i]['y']);
+            playersList[i].score = int.parse(list[i]["puntuation"]);
           }
         }
       } else 
       if (data['type'] == 'lost') {
         int posList = int.parse(data['positionList']);
         playersList[posList].fainted = true;
+        playersList[posList].current = BirdMovement.death;
       } else 
       if (data['type'] == 'finnish') {
+        gameover = true;
         List<dynamic> list = data['data'];
         for (int i=0; i < list.length ; i++) {
           playersList[i].score = int.parse(list[i]['puntuation']);
@@ -175,6 +181,7 @@ class AppData extends ChangeNotifier{
 
   void sendFainted() {
     int myScore = playersList[myIdNum].score;
-    websocket.sendMessage('{  "type": "loose", "puntuation": "$myScore" }');
+    websocket.sendMessage('{  "type": "loose", "puntuation": "$myScore" , "positionList": "$myIdNum"}');
+    
   }
 }

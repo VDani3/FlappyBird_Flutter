@@ -5,18 +5,35 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class MainMenu extends StatelessWidget {
+class MainMenu extends StatefulWidget {
   final GamePage game;
   static const String id = "mainMenu";
 
   MainMenu({Key? key, required this.game}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    TextEditingController _nameController = TextEditingController();
-    TextEditingController _ipController = TextEditingController();
-    game.pauseEngine();
+  _MainMenuState createState() => _MainMenuState();
+}
 
+class _MainMenuState extends State<MainMenu> {
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _ipController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    widget.game.pauseEngine();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _ipController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Material(
       color: Colors.white,
       child: Center(
@@ -57,9 +74,12 @@ class MainMenu extends StatelessWidget {
             ),
             ElevatedButton(
                 onPressed: () {
-                  AppData.instance.initializeWebsocket(/*_ipController.text*/"localhost:8888", _nameController.text, game); 
+                  if (AppData.instance.charging == false) {
+                    AppData.instance.charging = true;
+                    AppData.instance.initializeWebsocket(/*_ipController.text*/"localhost:8888", _nameController.text, widget.game);
+                  }
                 },
-                child: Text('Dale'))
+                child: Text('Dale')),
           ],
         ),
       ),

@@ -20,7 +20,7 @@ class GamePage extends FlameGame with TapDetector, HasCollisionDetection {
   @override
   Future<void> onLoad() async {
     addAll([
-      Background(),
+      //Background(),
       Ground(),
       AppData.instance.playersList[0],
       AppData.instance.playersList[1],

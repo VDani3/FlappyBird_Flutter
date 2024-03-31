@@ -16,10 +16,11 @@ import 'package:flutter/material.dart';
 class Bird extends SpriteGroupComponent<BirdMovement>
     with HasGameRef<GamePage>, CollisionCallbacks {
 
-  Bird({bool p = false, String name = "YOU", id = 0}) : super() {
+  Bird({bool p = false, String name = "YOU", id = 0, f = false}) : super() {
     this.p1 = p;
     this.name = name;
     this.id = id;
+    this.fainted = f;
   }
 
   String name = "YOU";
@@ -30,9 +31,10 @@ class Bird extends SpriteGroupComponent<BirdMovement>
 
   @override
   Future<void> onLoad() async {
-    final birdMidFlap = await gameRef.loadSprite(Assets.birdMidFlap[id]);
-    final birdUpFlap = await gameRef.loadSprite(Assets.birdUpFlap[id]);
-    final birdDownFlap = await gameRef.loadSprite(Assets.birdDownFlap[id]);
+    final birdMidFlap = await _loadImage(Assets.birdMidFlap[id]);
+    final birdUpFlap = await _loadImage(Assets.birdUpFlap[id]);
+    final birdDownFlap = await _loadImage(Assets.birdDownFlap[id]);
+    final birdDeath = await _loadImage(Assets.birdTomb);
 
     size = Vector2(35, 35);
     position = Vector2(50, gameRef.size.y / 2 - size.y / 2);
@@ -40,7 +42,8 @@ class Bird extends SpriteGroupComponent<BirdMovement>
     sprites = {
       BirdMovement.middle: birdMidFlap,
       BirdMovement.up: birdUpFlap,
-      BirdMovement.down: birdDownFlap
+      BirdMovement.down: birdDownFlap,
+      BirdMovement.death: birdDeath
     };
 
     if (p1) {
@@ -72,9 +75,11 @@ class Bird extends SpriteGroupComponent<BirdMovement>
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    if (other is PipeGroup || other is Pipe || other is Ground) {
+    if ((other is PipeGroup || other is Pipe || other is Ground) && p1) {
       fainted = true;
+      current = BirdMovement.death;
       AppData.instance.setFainted(id);
+      AppData.instance.sendFainted();
     }
   }
 
@@ -94,10 +99,12 @@ class Bird extends SpriteGroupComponent<BirdMovement>
   @override
   void update(double dt) {
     super.update(dt);
+    print(fainted);
     if (p1 && !fainted) position.y += Configuration.birdVelocity * dt;
-    if (position.y <= 0) {
+    if (position.y <= 0 && p1) {
       //gameOver();
       AppData.instance.setFainted(id);
+      AppData.instance.sendFainted();
     }
     if (AppData.instance.gameover) gameOver();
   }
@@ -108,5 +115,16 @@ class Bird extends SpriteGroupComponent<BirdMovement>
 
   int getScore() {
     return score;
+  }
+
+  Future<Sprite> _loadImage(String imgPath) async {
+    final image = await gameRef.loadSprite(imgPath);
+    
+    if (!p1) {
+      image.paint.color = image.paint.color.withOpacity(0.5);
+      print(image);
+    }
+    
+    return image;
   }
 }

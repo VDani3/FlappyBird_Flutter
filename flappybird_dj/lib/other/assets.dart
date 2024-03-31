@@ -29,6 +29,7 @@ class Assets {
     "ball_2.png",
     "ball_3.png"
   ];
+  static const birdTomb = "tomb.png";
 
   //UI Assets
   static const gameOver = "assets/images/gameover.png";

@@ -47,7 +47,9 @@ class PipeGroup extends PositionComponent with HasGameRef<GamePage> {
   }
 
   void updateScore() {
-    AppData.instance.playersList[AppData.instance.myIdNum].score += 1;
-    FlameAudio.play(Assets.point);
+    if (AppData.instance.playersList[AppData.instance.myIdNum].fainted == false) {
+      AppData.instance.playersList[AppData.instance.myIdNum].score += 1;
+      FlameAudio.play(Assets.point);
+    }
   }
 }

@@ -27,6 +27,7 @@ class WebSocketsHandler {
     await Future.delayed(const Duration(seconds: 1));
 
     _socketClient = IOWebSocketChannel.connect("ws://$ip");
+    AppData.instance.charging = false;
     _socketClient!.stream.listen(
       (message) {
         if (connectionStatus != ConnectionStatus.connected) {
@@ -41,6 +42,7 @@ class WebSocketsHandler {
         AppData.instance.game.overlays.add('mainMenu');
         AppData.instance.game.overlays.removeAll(['waiting', 'gameOver', 'countdown']);
         AppData.instance.game.pauseEngine();
+        AppData.instance.charging = false;
       },
       onDone: () {
         connectionStatus = ConnectionStatus.disconnected;
@@ -49,6 +51,7 @@ class WebSocketsHandler {
         AppData.instance.game.overlays.add('mainMenu');
         AppData.instance.game.overlays.removeAll(['waiting', 'gameOver', 'countdown']);
         AppData.instance.game.pauseEngine();
+        AppData.instance.charging = false;
       },
     );
   }

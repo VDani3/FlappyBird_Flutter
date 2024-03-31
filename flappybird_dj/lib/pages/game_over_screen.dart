@@ -80,5 +80,6 @@ class GameOverScreen extends StatelessWidget {
     game.overlays.add('mainMenu');
     game.overlays.remove('gameOver');
     game.resetGame();
+    AppData.instance.resetGame();
   }
 }
