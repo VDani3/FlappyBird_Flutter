@@ -33,6 +33,7 @@ var gameStarted = false;
 var startMessageSended = false;
 var playerLost = [];
 var pipeTimer = 0;
+var untilFirstPipe = 0;
 
 var ws = new webSockets()
 var gLoop = new gameLoop()
@@ -152,11 +153,14 @@ gLoop.run = (fps) => {
   // Mandem una pipe cada x segons
   if (gameStarted) {
     pipeTimer += 1/fps;
+    untilFirstPipe += 1/fps;
 
-    if (pipeTimer >= 5.5) {
-      const rSpacing =  100 + Math.random() * (500 / 4);
+    if (pipeTimer >= 2.25 && untilFirstPipe >= 3.25) {
+      const rSpacing =  130 + Math.random() * (500 / 4);
       const centerY = rSpacing + Math.random() * (500 - rSpacing);
       ws.broadcast(JSON.stringify({type: "pipe", spacing: rSpacing, centerY: centerY}));
+      pipeTimer = 0;
+    } else if (untilFirstPipe < 3.25) {
       pipeTimer = 0;
     }
   }
@@ -166,6 +170,7 @@ gLoop.run = (fps) => {
     gameStarted = false;
     startMessageSended = false;
     pipeTimer = 0;
+    untilFirstPipe = 0;
     console.log('game ended');
   }
 
@@ -181,6 +186,7 @@ gLoop.run = (fps) => {
     console.log('game ended');
     ws.broadcast(JSON.stringify({ type: "finnish", data: playerLost }))
     pipeTimer = 0;
+    untilFirstPipe = 0;
     playerLost = []
   }
 

@@ -74,9 +74,9 @@ class _MainMenuState extends State<MainMenu> {
             ),
             ElevatedButton(
                 onPressed: () {
-                  if (AppData.instance.charging == false) {
+                  if (AppData.instance.charging == false && _nameController.text != "" && _ipController.text != "") {
                     AppData.instance.charging = true;
-                    AppData.instance.initializeWebsocket(/*_ipController.text*/"localhost:8888", _nameController.text, widget.game);
+                    AppData.instance.initializeWebsocket(_ipController.text/*"localhost:8888"*/, _nameController.text, widget.game);
                   }
                 },
                 child: Text('Dale')),

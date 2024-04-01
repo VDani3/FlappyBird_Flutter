@@ -54,6 +54,7 @@ class AppData extends ChangeNotifier{
     for (int i = 0; i < 4; i++) {
       playersList.add(Bird());
     }
+    websocket.closeConnection();
   }
 
   void setPlayers(){

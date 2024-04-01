@@ -71,4 +71,12 @@ class WebSocketsHandler {
 
     _socketClient!.sink.close();
   }
+
+  void closeConnection() {
+    AppData.instance.charging = true;
+    disconnectFromServer();
+    connectionStatus = ConnectionStatus.disconnected;
+    mySocketId = "";
+    AppData.instance.charging = false;
+  }
 }

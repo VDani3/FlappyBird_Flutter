@@ -21,6 +21,16 @@ class GameOverScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
+              child: Text(
+                'Resultats',
+                style: TextStyle(
+                  fontSize: 40,
+                  color: Colors.white,
+                  fontFamily: "Game",
+                ),
+              ),
+            ),
+            Container(
               width: MediaQuery.of(context).size.width / 2,
               height: MediaQuery.of(context).size.width / 2,
               child: ListView.builder(
@@ -33,8 +43,8 @@ class GameOverScreen extends StatelessWidget {
                       children: [
                         Image.asset(
                           'assets/images/' + Assets.birdMidFlap[index],
-                          width: 60,
-                          height: 60,
+                          width: 40,
+                          height: 40,
                         ),
                         SizedBox(
                           width: 16,
@@ -42,7 +52,7 @@ class GameOverScreen extends StatelessWidget {
                         Text(
                           AppData.instance.getPlayerName(index),
                           style: TextStyle(
-                            fontSize: 40,
+                            fontSize: 30,
                             color: Assets.fontColors[index],
                             fontFamily: "Game",
                           ),
@@ -53,7 +63,7 @@ class GameOverScreen extends StatelessWidget {
                         Text(
                           '${AppData.instance.getPlayerScore(index)}p',
                           style: TextStyle(
-                            fontSize: 40,
+                            fontSize: 30,
                             color: Colors.white,
                             fontFamily: "Game",
                           ),
